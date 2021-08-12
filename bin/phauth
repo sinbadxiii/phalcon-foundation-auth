@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-foreach ([__DIR__ . '/../../../autoload.php', __DIR__ . '/../vendor/autoload.php'] as $file) {
+foreach ([__DIR__ . '/../../../../autoload.php', __DIR__ . '/../../vendor/autoload.php'] as $file) {
     if (file_exists($file)) {
         require $file;
         break;
@@ -13,22 +13,12 @@ list($operations, $attributes) = parseArgs($argv);
 if (empty($operations)) {
     showHelp("Must specify at least one file.");
 }
-//
-//$lexer = new PhpParser\Lexer\Emulative(['usedAttributes' => [
-//    'startLine', 'endLine', 'startFilePos', 'endFilePos', 'comments'
-//]]);
-//$parser = (new PhpParser\ParserFactory)->create(
-//    PhpParser\ParserFactory::PREFER_PHP7,
-//    $lexer
-//);
-//$dumper = new PhpParser\NodeDumper([
-//    'dumpComments' => true,
-//    'dumpPositions' => $attributes['with-positions'],
-//]);
-//$prettyPrinter = new PhpParser\PrettyPrinter\Standard;
-//
-//$traverser = new PhpParser\NodeTraverser();
-//$traverser->addVisitor(new PhpParser\NodeVisitor\NameResolver);
+
+$operation = new \Sinbadxiii\PhalconFoundationAuth\Lib\Internal\Operation(
+    $operations, $attributes
+);
+
+$operation->run();
 
 function showHelp($error = '') {
     if ($error) {
@@ -40,12 +30,15 @@ Usage: phauth [operations]
 Operations is a list of the following options:
 
     -c, --copy              Copy authentication classes to your app 
+    -b, --base-dir-app      Base App Dir to your app (if not default "app")
+    -s, --controllers-dir   Controllers Dir  
+    -m, --middlewares-dir   Middlewares Dir 
     -h, --help              Display this page
 
 Example:
-    phauth -с
+    phauth -c -b src -s Controllers
 
-    Copy controllers, middleware.
+    Copy Controllers in src/Controllers and middleware in src/Security.
 
 
 OUTPUT
@@ -55,15 +48,10 @@ OUTPUT
 
 function parseArgs($args) {
     $operations = [];
-    $attributes = [
-        'with-column-info' => false,
-        'with-positions' => false,
-        'with-recovery' => false,
-    ];
 
     array_shift($args);
     $parseOptions = true;
-    foreach ($args as $arg) {
+    foreach ($args as $index => $arg) {
         if (!$parseOptions) {
             continue;
         }
@@ -72,6 +60,18 @@ function parseArgs($args) {
             case '--copy':
             case '-c':
                 $operations[] = 'copy';
+                break;
+            case '--base-dir-app':
+            case '-b';
+                $attributes['base-dir-app'] = $args[$index + 1];
+                break;
+            case '--controllers-dir':
+            case '-s';
+                $attributes['controllers-dir'] = $args[$index + 1];
+                break;
+            case '--middlewares-dir':
+            case '-m';
+                $attributes['middlewares-dir'] = $args[$index + 1];
                 break;
             case '--help':
             case '-h';
