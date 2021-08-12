@@ -1,0 +1,33 @@
+{
+  "name": "sinbadxiii/phalcon-foundation-auth",
+  "description": "Foundation for Phalcon Auth",
+  "keywords": ["phalcon", "framework", "auth foundation", "authorization foundation", "Phalcon Auth Foundation"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Sergey Mukhin",
+      "email": "sinbadxiii@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^7.4 || ^8.0",
+    "sinbadxiii/phalcon-throttle": "dev-master"
+  },
+  "require-dev": {
+  },
+  "autoload": {
+    "psr-4": {
+      "Sinbadxiii\\PhalconFoundationAuth\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Sinbadxiii\\PhalconFoundationAuth\\Tests\\": "tests/"
+    }
+  },
+  "bin": [
+    "bin/phauth"
+  ],
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}

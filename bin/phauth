@@ -1,0 +1,91 @@
+#!/usr/bin/env php
+<?php
+
+foreach ([__DIR__ . '/../../../autoload.php', __DIR__ . '/../vendor/autoload.php'] as $file) {
+    if (file_exists($file)) {
+        require $file;
+        break;
+    }
+}
+
+list($operations, $attributes) = parseArgs($argv);
+
+if (empty($operations)) {
+    showHelp("Must specify at least one file.");
+}
+//
+//$lexer = new PhpParser\Lexer\Emulative(['usedAttributes' => [
+//    'startLine', 'endLine', 'startFilePos', 'endFilePos', 'comments'
+//]]);
+//$parser = (new PhpParser\ParserFactory)->create(
+//    PhpParser\ParserFactory::PREFER_PHP7,
+//    $lexer
+//);
+//$dumper = new PhpParser\NodeDumper([
+//    'dumpComments' => true,
+//    'dumpPositions' => $attributes['with-positions'],
+//]);
+//$prettyPrinter = new PhpParser\PrettyPrinter\Standard;
+//
+//$traverser = new PhpParser\NodeTraverser();
+//$traverser->addVisitor(new PhpParser\NodeVisitor\NameResolver);
+
+function showHelp($error = '') {
+    if ($error) {
+        fwrite(STDERR, $error . "\n\n");
+    }
+    fwrite($error ? STDERR : STDOUT, <<<OUTPUT
+Usage: phauth [operations]
+
+Operations is a list of the following options:
+
+    -c, --copy              Copy authentication classes to your app 
+    -h, --help              Display this page
+
+Example:
+    phauth -с
+
+    Copy controllers, middleware.
+
+
+OUTPUT
+    );
+    exit($error ? 1 : 0);
+}
+
+function parseArgs($args) {
+    $operations = [];
+    $attributes = [
+        'with-column-info' => false,
+        'with-positions' => false,
+        'with-recovery' => false,
+    ];
+
+    array_shift($args);
+    $parseOptions = true;
+    foreach ($args as $arg) {
+        if (!$parseOptions) {
+            continue;
+        }
+
+        switch ($arg) {
+            case '--copy':
+            case '-c':
+                $operations[] = 'copy';
+                break;
+            case '--help':
+            case '-h';
+                showHelp();
+                break;
+            case '--':
+                $parseOptions = false;
+                break;
+            default:
+                if ($arg[0] === '-') {
+                    showHelp("Invalid operation $arg.");
+                }
+        }
+    }
+
+    return [$operations, $attributes];
+}
