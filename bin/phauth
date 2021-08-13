@@ -32,7 +32,6 @@ Operations is a list of the following options:
     -c, --copy              Copy authentication classes to your app 
     -b, --base-dir-app      Base App Dir to your app (if not default "app")
     -s, --controllers-dir   Controllers Dir  
-    -m, --middlewares-dir   Middlewares Dir 
     -h, --help              Display this page
 
 Example:

@@ -28,12 +28,13 @@ class CopyOperation implements OperationInterface
 
     private function copyControllers()
     {
-        if (!dir($this->baseDirApp . "/Controllers/Auth") && !mkdir($concurrentDirectory = $this->baseDirApp . "/Controllers/Auth") && !is_dir($concurrentDirectory)) {
+        if (!dir($this->baseDirApp . "/Controllers/Auth") &&
+            !mkdir($concurrentDirectory = $this->baseDirApp . "/" . ($this->attributes['controllers-dir'] ?? 'controllers') . "/Auth") && !is_dir($concurrentDirectory)) {
             throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
         }
 
-        copy($this->baseDirLib . '/Controllers/Auth/LoginController.php', $this->baseDirApp . "/Controllers/Auth/LoginController.php");
-        copy($this->baseDirLib . '/Controllers/Auth/RegisterController.php', $this->baseDirApp . "/Controllers/Auth/RegisterController.php");
+        copy($this->baseDirLib . '/Controllers/Auth/LoginController.php', $this->baseDirApp . "/" . ($this->attributes['controllers-dir'] ?? 'controllers') . "/Auth/LoginController.php");
+        copy($this->baseDirLib . '/Controllers/Auth/RegisterController.php', $this->baseDirApp . "/" . ($this->attributes['controllers-dir'] ?? 'controllers') . "/Auth/RegisterController.php");
     }
 
     private function copyMiddlewares()
