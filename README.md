@@ -46,6 +46,13 @@ $di->setShared("auth", function () {
 });
 ```
 
+или
+
+```php 
+$authProvider = new \Sinbadxiii\PhalconAuth\AuthProvider();
+$authProvider->register($di);
+```
+
 а в диспетчере приаттачить мидлвар
 
 ```php 
@@ -78,7 +85,12 @@ $router->mount(AuthRoutes::routes());
 $router->handle($_SERVER['REQUEST_URI']);
 ```
 
-Так же нужно будет проследить, чтобы уже имелись или зарегистрировать следующие сервис провайдеры:
+Так же нужно будет проследить, чтобы уже имелись следующие сервис провайдеры:
+
+- session
+- cache
+- security
+- cookies
 
 ```php 
 $di->setShared('session', function () {
@@ -122,6 +134,33 @@ $di->set('cookies', function (){
         return $cookies;
     }
 );
+```
+
+либо воспользоваться сервисами из библиотеки:
+
+```php 
+$securityProvider = new \Sinbadxiii\PhalconFoundationAuth\Providers\SecurityProvider();
+$securityProvider->register($di);
+
+$cookieProvider = new \Sinbadxiii\PhalconFoundationAuth\Providers\CookiesProvider();
+$cookieProvider->register($di);
+```
+
+а в config иметь доступ к настройкам cache, например Phalcon Redis Adapter
+
+```php 
+'cache' => [
+        'default' => 'redis',
+        'options' => [
+            'options' => [
+                'defaultSerializer' => 'Json',
+                'scheme' => 'tcp',
+                'host'   => '127.0.0.1',
+                'port'   => 6379,
+                'lifetime' => 3600,
+            ],
+        ]
+    ]
 ```
 
 ### License
