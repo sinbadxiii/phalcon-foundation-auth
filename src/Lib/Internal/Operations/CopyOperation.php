@@ -7,6 +7,7 @@ namespace Sinbadxiii\PhalconFoundationAuth\Lib\Internal\Operations;
 class CopyOperation implements OperationInterface
 {
     protected $baseDirApp;
+    protected $controllersDir;
     protected $baseDirLib;
 
     protected $attributes;
@@ -18,7 +19,8 @@ class CopyOperation implements OperationInterface
 
     public function make()
     {
-       $this->baseDirApp = dirname(__DIR__, 8) . "/" . ($this->attributes['base-dir-app'] ?? 'app') . "/";
+       $this->baseDirApp = dirname(__DIR__, 7) . "/" . ($this->attributes['base-dir-app'] ?? 'app');
+       $this->controllersDir = $this->baseDirApp . "/" . ($this->attributes['controllers-dir'] ?? 'controllers');
        $this->baseDirLib = dirname(__DIR__, 4) . "/stubs/";
 
        $this->copyControllers();
@@ -28,13 +30,13 @@ class CopyOperation implements OperationInterface
 
     private function copyControllers()
     {
-        if (!dir($this->baseDirApp . "/Controllers/Auth") &&
-            !mkdir($concurrentDirectory = $this->baseDirApp . "/" . ($this->attributes['controllers-dir'] ?? 'controllers') . "/Auth") && !is_dir($concurrentDirectory)) {
+        if (!dir($this->controllersDir . "/Auth") &&!mkdir($concurrentDirectory = $this->controllersDir . "/Auth")
+            && !is_dir($concurrentDirectory)) {
             throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
         }
 
-        copy($this->baseDirLib . '/Controllers/Auth/LoginController.php', $this->baseDirApp . "/" . ($this->attributes['controllers-dir'] ?? 'controllers') . "/Auth/LoginController.php");
-        copy($this->baseDirLib . '/Controllers/Auth/RegisterController.php', $this->baseDirApp . "/" . ($this->attributes['controllers-dir'] ?? 'controllers') . "/Auth/RegisterController.php");
+        copy($this->baseDirLib . '/Controllers/Auth/LoginController.php', $this->controllersDir . "/Auth/LoginController.php");
+        copy($this->baseDirLib . '/Controllers/Auth/RegisterController.php', $this->controllersDir . "/Auth/RegisterController.php");
     }
 
     private function copyMiddlewares()
