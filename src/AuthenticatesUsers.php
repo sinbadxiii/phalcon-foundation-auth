@@ -2,6 +2,10 @@
 
 namespace Sinbadxiii\PhalconFoundationAuth;
 
+/**
+ * Trait AuthenticatesUsers
+ * @package Sinbadxiii\PhalconFoundationAuth
+ */
 trait AuthenticatesUsers
 {
     use RedirectsUsers, ThrottlesLogins;
@@ -60,12 +64,6 @@ trait AuthenticatesUsers
 
     protected function sendLoginResponse()
     {
-//        $request->session()->regenerate();
-//
-//        $this->clearLoginAttempts($request);
-//
-//        return $this->authenticated($request, $this->guard()->user())
-//                ?: redirect()->intended($this->redirectPath());
     }
 
     protected function authenticated($user)
@@ -75,9 +73,6 @@ trait AuthenticatesUsers
 
     protected function sendFailedLoginResponse()
     {
-//        throw ValidationException::withMessages([
-//            $this->username() => [trans('auth.failed')],
-//        ]);
     }
 
     public function usernameKey()
@@ -94,10 +89,6 @@ trait AuthenticatesUsers
 
     protected function validateLogin()
     {
-//        $request->validate([
-//            $this->username() => 'required|string',
-//            'password' => 'required|string',
-//        ]);
     }
 
     private function failLogin()
@@ -121,5 +112,10 @@ trait AuthenticatesUsers
     protected function guard()
     {
 //        return Auth::guard();
+    }
+
+    public function authAccess()
+    {
+        return false;
     }
 }
