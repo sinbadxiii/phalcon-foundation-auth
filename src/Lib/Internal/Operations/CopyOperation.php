@@ -35,7 +35,8 @@ class CopyOperation implements OperationInterface
             throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
         }
 
-        copy($this->baseDirLib . '/Controllers/Auth/LoginController.php', $this->controllersDir . "/Auth/LoginController.php");
+        $stubLoginController = ($this->attributes['jwt-auth']) ? "JWT/LoginController" : "LoginController";
+        copy($this->baseDirLib . '/Controllers/Auth/' . $stubLoginController . ".php", $this->controllersDir . "/Auth/LoginController.php");
         copy($this->baseDirLib . '/Controllers/Auth/RegisterController.php', $this->controllersDir . "/Auth/RegisterController.php");
     }
 

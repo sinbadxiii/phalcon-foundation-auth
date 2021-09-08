@@ -33,6 +33,7 @@ Operations is a list of the following options:
     -b, --base-dir-app      Base App Dir to your app (if not default "app")
     -s, --controllers-dir   Controllers Dir  
     -h, --help              Display this page
+    -j  --jwt               JWT authentication
 
 Example:
     phauth -c -b src -s Controllers
@@ -47,6 +48,10 @@ OUTPUT
 
 function parseArgs($args) {
     $operations = [];
+
+    $attributes = [
+        'jwt-auth' => false
+    ];
 
     array_shift($args);
     $parseOptions = true;
@@ -71,6 +76,10 @@ function parseArgs($args) {
             case '--middlewares-dir':
             case '-m';
                 $attributes['middlewares-dir'] = $args[$index + 1];
+                break;
+            case '--jwt':
+            case '-j';
+                $attributes['jwt-auth'] = true;
                 break;
             case '--help':
             case '-h';

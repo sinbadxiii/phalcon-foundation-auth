@@ -23,4 +23,15 @@ class Routes
         $router->addPost("/register", 'App\Controllers\Auth\Register::register')->setName("register");
         return $router;
     }
+
+    public static function jwt($options = [])
+    {
+        $router = new Group();
+        $router->addPost("/auth/login", 'App\Controllers\Auth\Login::login')->setName("login");
+        $router->addPost("/auth/logout", 'App\Controllers\Auth\Login::logout')->setName("logout");
+        $router->addPost("/auth/refresh", 'App\Controllers\Auth\Login::refresh')->setName("refresh");
+        $router->addPost("/auth/me", 'App\Controllers\Auth\Login::me')->setName("me");
+
+        return $router;
+    }
 }
