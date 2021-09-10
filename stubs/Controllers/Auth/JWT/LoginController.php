@@ -10,6 +10,11 @@ class LoginController extends Controller
 {
     protected bool $authAccess = false;
 
+    public function initialize()
+    {
+        $this->view->disable();
+    }
+
     public function loginAction()
     {
         $credentials = [
@@ -17,8 +22,12 @@ class LoginController extends Controller
             'password' => $this->request->getJsonRawBody()->password
         ];
 
-        if (! $token = $this->auth->attempt($credentials, true)) {
-            return json_encode(['error' => 'Unauthorized'], 401);
+        $this->auth->claims(['aud' => [
+            $this->request->getURI()
+        ]]);
+
+        if (! $token = $this->auth->attempt($credentials)) {
+            $this->response->setJsonContent(['error' => 'Unauthorized'])->send();
         }
 
         return $this->respondWithToken($token);
@@ -26,14 +35,14 @@ class LoginController extends Controller
 
     public function meAction()
     {
-        return json_encode($this->auth->user());
+        $this->response->setJsonContent($this->auth->user())->send();
     }
 
     public function logoutAction()
     {
         $this->auth->logout();
 
-        return json_encode(['message' => 'Successfully logged out']);
+        $this->response->setJsonContent(['message' => 'Successfully logged out'])->send();
     }
 
     public function refreshAction()
@@ -43,11 +52,7 @@ class LoginController extends Controller
 
     protected function respondWithToken($token)
     {
-        return json_encode([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => $this->auth->factory()->getTTL() * 60
-        ]);
+        $this->response->setJsonContent($token->toResponse())->send();
     }
 
     public function authAccess()
