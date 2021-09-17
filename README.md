@@ -18,7 +18,7 @@ PHP 7.2-8.0.
 
 Require the project using composer:
 
-`composer require "sinbadxiii/phalcon-foundation-auth:^v1.0.0"`
+`composer require "sinbadxiii/phalcon-foundation-auth:^v0.0.3"`
 
 Run helper script 
 
@@ -127,7 +127,7 @@ $di->set("security", function ()  use ($di) {
 
 //лучше всего шифровать данные кук
 $di->set('cookies', function (){
-        $cookies = new Phalcon\Http\Response\Cookie();
+        $cookies = new Phalcon\Http\Response\Cookies();
         $cookies->useEncryption(true);
         $salt = $this->getConfig()->path('app.key');
         $cookies->setSignKey($salt);
