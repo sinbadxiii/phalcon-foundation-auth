@@ -11,7 +11,7 @@
   ],
   "require": {
     "php": "^7.4 || ^8.0",
-    "sinbadxiii/phalcon-throttle": "dev-master",
+    "sinbadxiii/phalcon-throttle": "^v1.0.0",
     "sinbadxiii/phalcon-auth": "^1.0.0"
   },
   "require-dev": {
